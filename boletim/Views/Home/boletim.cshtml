@@ -1,0 +1,77 @@
+@{
+    ViewData["Title"] = "Boletim Escolar";
+    
+    // Resgatando as listas da ViewBag
+    var listaDisciplinas = ViewBag.Disciplinas as List<string>;
+    var listaNotas = ViewBag.Notas as List<double>;
+    
+    // Variável para acumular as notas e calcular a média depois
+    double somaNotas = 0;
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">Boletim Escolar</h2>
+
+    <table class="table table-striped table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th>Disciplina</th>
+                <th>Nota</th>
+                <th>Status</th>
+                <th>Classificação</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < listaDisciplinas.Count; i++)
+            {
+                // C# puro antes do HTML: sem arroba
+                somaNotas += listaNotas[i];
+
+                <tr>
+                    <td>@listaDisciplinas[i]</td>
+                    <td>@listaNotas[i].ToString("F1")</td>
+                    <td>
+                        @* Dentro do HTML: PRECISA do @if *@
+                        @if (listaNotas[i] >= 5.0)
+                        {
+                            <span style="color: green; font-weight: bold;">Aprovado</span>
+                        }
+                        else
+                        {
+                            <span style="color: red; font-weight: bold;">Reprovado</span>
+                        }
+                    </td>
+                    <td>
+                        @* Uso obrigatório do @switch padrão do C# com as regras de notas *@
+                        @switch (listaNotas[i])
+                        {
+                            case var n when (n >= 9.0):
+                                <span class="badge bg-success">A</span>
+                                break;
+                            case var n when (n >= 7.0):
+                                <span class="badge bg-primary">B</span>
+                                break;
+                            case var n when (n >= 5.0):
+                                <span class="badge bg-warning text-dark">C</span>
+                                break;
+                            default:
+                                <span class="badge bg-danger">D</span>
+                                break;
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    @* Calculando a média geral no final *@
+    @{
+        double mediaGeral = somaNotas / listaDisciplinas.Count;
+    }
+    
+    <div class="card mt-3">
+        <div class="card-body bg-light">
+            <h4>Média Geral do Semestre: <span class="text-primary">@mediaGeral.ToString("F1")</span></h4>
+        </div>
+    </div>
+</div>
