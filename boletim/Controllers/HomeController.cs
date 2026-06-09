@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using boletim.Models; 
 
+
 namespace boletim.Controllers
 {
     public class HomeController : Controller
